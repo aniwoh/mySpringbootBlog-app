@@ -9,27 +9,22 @@ const registerData = ref({
 })
 </script>
 <template>
-<el-main class="container">
-    <div class="login-wrapper">
-        <div class="header">
-            <span v-if="!isRegister">Login</span>
-            <span v-else>Register</span>
-        </div>
-        <form @submit.prevent="handleSubmit">
-            <input type="text" v-model="registerData.username" placeholder="Username" />
-            <input type="password" v-model="registerData.password" placeholder="Password" />
-            <input v-if="isRegister" type="password" v-model="registerData.repassword" placeholder="Re-enter Password" />
-            <button class="btn" type="submit">{{ !isRegister ? 'Login' : 'Register' }}</button>
-        </form>
-        <div class="msg">
-            <span v-if="isRegister">Already have an account? <a @click="isRegister = false">Login</a></span>
-            <span v-else>Don't have an account? <a @click="isRegister = true">Register</a></span>
-        </div>
+<el-form :model="form" label-width="auto" style="max-width: 600px" class="container">
+    <el-form-title v-if="isRegister">Register</el-form-title>
+    <el-form-item>
+      <el-input type="text" v-model="registerData.username" placeholder="Username"></el-input>
+      <el-input type="password" v-model="registerData.password" placeholder="Password"></el-input>
+        <el-input v-if="isRegister" type="password" v-model="registerData.repassword" placeholder="Re-enter Password"></el-input>
+      <el-button @click="resetForm">Reset</el-button>
+    </el-form-item>
+    <div class="msg">
+        <span v-if="isRegister">Already have an account? <a @click="isRegister = false">Login</a></span>
+        <span v-else>Don't have an account? <a @click="isRegister = true">Register</a></span>
     </div>
-</el-main>
+</el-form>
 </template>
 <style scoped>
-    * {
+    /* * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -95,5 +90,5 @@ const registerData = ref({
 
     .errorlist {
         color: red;
-    }
+    } */
 </style>
