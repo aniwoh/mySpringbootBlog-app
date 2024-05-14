@@ -1,8 +1,7 @@
 <template>
-  <div id="login" v-title data-title="登录 - For Fun">
+  <div id="login" v-title data-title="登录页面">
     <div class="me-login-box me-login-box-radius">
-      <h1>ForFun 登录</h1>
-
+      <h1>登录</h1>
       <el-form ref="userForm" :model="userForm" :rules="rules">
         <el-form-item prop="account">
           <el-input placeholder="用户名" v-model="userForm.account"></el-input>
@@ -18,11 +17,8 @@
       </el-form>
 
       <div class="me-login-design">
-        <p>Designed by
-          <strong>
-            <router-link to="/" class="me-login-design-color">ForFun</router-link>
-          </strong>
-        </p>
+        <p>Don't have an account? <router-link to="/register" class="me-login-design-color">Register</router-link></p>
+        <p>Or Back to <router-link to="/" class="me-login-design-color">Index</router-link></p>
       </div>
 
     </div>

@@ -6,7 +6,7 @@
           <img alt="" src="/avater_128.ico"/>
         </router-link>
       </el-col>
-      <el-col v-if="!simple" :span="16">
+      <el-col :span="16">
         <el-menu :router=true menu-trigger="click" active-text-color="#5FB878" :default-active="activeIndex"
                  mode="horizontal">
           <el-menu-item index="/">首页</el-menu-item>
@@ -19,14 +19,8 @@
           <el-col :span="4" :offset="4">
             <el-menu-item index="/write"><i class="el-icon-edit"></i>写文章</el-menu-item>
           </el-col>
-
         </el-menu>
       </el-col>
-
-      <template v-else>
-        <slot></slot>
-      </template>
-
       <el-col :span="4">
         <el-menu :router=true menu-trigger="click" mode="horizontal" active-text-color="#5FB878">
 
@@ -59,10 +53,6 @@ export default {
   name: 'BaseHeader',
   props: {
     activeIndex: String,
-    simple: {
-      type: Boolean,
-      default: false
-    }
   },
   data() {
     return {}

@@ -1,135 +1,60 @@
 <template>
-  <div v-title data-title="ForFun Find Yourself">
+  <div id="index">
     <el-container>
-
-      <el-main class="me-articles">
-
-        <article-scroll-page></article-scroll-page>
-
+      <el-main>
+        <div id="post-list"></div>
       </el-main>
-
-      <el-aside>
-
-        <card-me class="me-area"></card-me>
-        <card-tag :tags="hotTags"></card-tag>
-
-        <card-article cardHeader="最热文章" :articles="hotArticles"></card-article>
-
-        <card-archive cardHeader="文章归档" :archives="archives"></card-archive>
-
-        <card-article cardHeader="最新文章" :articles="newArticles"></card-article>
-
-      </el-aside>
-
     </el-container>
+
   </div>
 </template>
-
 <script>
-import CardMe from '@/components/card/CardMe'
-import CardArticle from '@/components/card/CardArticle'
-import CardArchive from '@/components/card/CardArchive'
-import CardTag from '@/components/card/CardTag'
-import ArticleScrollPage from '@/views/common/ArticleScrollPage'
-
-import {getArticles, getHotArtices, getNewArtices} from '@/api/article'
-import {getHotTags} from '@/api/tag'
-import {listArchives} from '@/api/article'
-
-export default {
-  name: 'Index',
-  created() {
-    this.getHotArtices()
-    this.getNewArtices()
-    this.getHotTags()
-    this.listArchives()
-  },
-  data() {
-    return {
-      hotTags: [],
-      hotArticles: [],
-      newArticles: [],
-      archives: []
+import service from "@/utils/request/index.js";
+let article_list = []
+service.get(`/article/list`)
+    .then(response => {
+      console.log(response)
+      article_list = response;
+      reloadArticleCard()
+    })
+    .catch(error => {
+      console.log(error);
+    });
+function reloadArticleCard(){
+  console.log(article_list)
+  const mainContainer =document.getElementById("post-list")
+  function createArticleCard(article) {
+    const card = document.createElement("a");
+    card.className = "post-card";
+    card.href = "/post?id=" + article.id
+    const imgDiv = document.createElement("div");
+    imgDiv.className = "post-card-img";
+    imgDiv.id = "post-" + article.id;
+    // 设置图片样式或内容，根据需要自行添
+    const textDiv = document.createElement("div");
+    textDiv.className = "post-card-text";
+    let addHtml= "<h2>" + article.title + "</h2><p>" +
+        "<span style='float: left;'>" + article.author + " " + article.created_at + "</span>" +
+        "<span style='float: right;'>"
+    if (article.tags__name!= null){
+      article.tags__name.forEach(function(tag) {
+        addHtml += "<span class='tag'>#" + tag + "</span>";
+      });
     }
-  },
-  methods: {
-    getHotArtices() {
-      let that = this
-      getHotArtices().then(data => {
-        that.hotArticles = data.data
-      }).catch(error => {
-        if (error !== 'error') {
-          that.$message({type: 'error', message: '最热文章加载失败!', showClose: true})
-        }
-
-      })
-
-    },
-    getNewArtices() {
-      let that = this
-      getNewArtices().then(data => {
-        that.newArticles = data.data
-      }).catch(error => {
-        if (error !== 'error') {
-          that.$message({type: 'error', message: '最新文章加载失败!', showClose: true})
-        }
-
-      })
-
-    },
-    getHotTags() {
-      let that = this
-      getHotTags().then(data => {
-        that.hotTags = data.data
-      }).catch(error => {
-        if (error !== 'error') {
-          that.$message({type: 'error', message: '最热标签加载失败!', showClose: true})
-        }
-
-      })
-    },
-    listArchives() {
-      listArchives().then((data => {
-        this.archives = data.data
-      })).catch(error => {
-        if (error !== 'error') {
-          that.$message({type: 'error', message: '文章归档加载失败!', showClose: true})
-        }
-      })
-    }
-
-  },
-  components: {
-    'card-me': CardMe,
-    'card-article': CardArticle,
-    'card-tag': CardTag,
-    ArticleScrollPage,
-    CardArchive
+    addHtml+= "<i class='fa-solid fa-heart'></i> " + "       "+article.thumbs_up+"       " +
+        "<i class='fa-solid fa-eye'></i> " + "       "+article.view_count+"       " +
+        "<i class='fa-solid fa-comment'></i> " + "       "+article.comment_count+"       "+"</span></p>";
+    textDiv.innerHTML=addHtml;
+    card.appendChild(imgDiv);
+    card.appendChild(textDiv)
+    return card;
   }
+  article_list.forEach(article => {
+    const articleCard = createArticleCard(article);
+    mainContainer.appendChild(articleCard);
+  });
 }
 </script>
 
-<style scoped>
-
-.el-container {
-  width: 960px;
-}
-
-.el-aside {
-  margin-left: 20px;
-  width: 260px;
-}
-
-.el-main {
-  padding: 0px;
-  line-height: 16px;
-}
-
-.el-card {
-  border-radius: 0;
-}
-
-.el-card:not(:first-child) {
-  margin-top: 20px;
-}
+<style>
 </style>

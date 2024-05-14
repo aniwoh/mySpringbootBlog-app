@@ -9,11 +9,6 @@ const baseHeader = ref(BaseHeader);
   <div id="home">
     <el-container>
       <base-header></base-header>
-      <el-main class="me-articles">
-
-        <article-scroll-page></article-scroll-page>
-
-      </el-main>
       <router-view class="me-container"/>
       <base-footer></base-footer>
     </el-container>
