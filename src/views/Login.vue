@@ -2,9 +2,9 @@
   <div id="login" v-title data-title="登录页面">
     <div class="me-login-box me-login-box-radius">
       <h1>登录</h1>
-      <el-form ref="userForm" :model="userForm" :rules="rules">
+      <el-form ref="userFormRef" :model="userForm" :rules="rules">
         <el-form-item prop="account">
-          <el-input placeholder="用户名" v-model="userForm.account"></el-input>
+          <el-input placeholder="用户名" v-model="userForm.username"></el-input>
         </el-form-item>
 
         <el-form-item prop="password">
@@ -12,7 +12,7 @@
         </el-form-item>
 
         <el-form-item size="small" class="me-login-button">
-          <el-button type="primary" @click.native.prevent="login('userForm')">登录</el-button>
+          <el-button type="primary" @click="submitForm(userFormRef)">登录</el-button>
         </el-form-item>
       </el-form>
 
@@ -25,47 +25,56 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Login',
-  data() {
-    return {
-      userForm: {
-        account: '',
-        password: ''
-      },
-      rules: {
-        account: [
-          {required: true, message: '请输入用户名', trigger: 'blur'},
-          {max: 10, message: '不能大于10个字符', trigger: 'blur'}
-        ],
-        password: [
-          {required: true, message: '请输入密码', trigger: 'blur'},
-          {max: 10, message: '不能大于10个字符', trigger: 'blur'}
-        ]
-      }
-    }
-  },
-  methods: {
-    login(formName) {
-      let that = this
-
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-
-          that.$store.dispatch('login', that.userForm).then(() => {
-            that.$router.go(-1)
-          }).catch((error) => {
-            if (error !== 'error') {
-              that.$message({message: error, type: 'error', showClose: true});
+<script setup>
+import {ref,reactive} from "vue";
+import {login} from "@/api/login.js";
+import {ElMessage} from "element-plus";
+import {useRouter} from "vue-router";
+const router=useRouter()
+const userFormRef = ref(null)
+const userForm= reactive({
+  username: '',
+  password: '',
+})
+const rules= ref({
+  username: [
+      {required: true, message: '请输入用户名', trigger: 'blur'},
+      {max: 10, message: '不能大于10个字符', trigger: 'blur'}
+  ],
+  password: [
+      {required: true, message: '请输入密码', trigger: 'blur'},
+      {max: 10, message: '不能大于10个字符', trigger: 'blur'}
+]
+})
+const submitForm = async (formName) => {
+  if (!formName) return
+  console.log(userForm.username)
+  await formName.validate((valid)=>{
+    if (valid){
+      login(userForm.username,userForm.password)
+          .then(response=>{
+            const res=response.data
+            console.log(res)
+            if (res.code===0){
+              ElMessage({
+                message: '注册成功',
+                type: 'success'
+              })
+              router.push('/')
+            }else {
+              ElMessage({
+                message: res.data,
+                type: 'error'
+              })
             }
           })
-        } else {
-          return false;
-        }
-      });
+    } else {
+      ElMessage({
+        message: '输入有误',
+        type: 'error'
+      })
     }
-  }
+  })
 }
 </script>
 
@@ -100,7 +109,7 @@ export default {
 
 .me-login-box-radius {
   border-radius: 10px;
-  box-shadow: 0px 0px 1px 1px rgba(161, 159, 159, 0.1);
+  box-shadow: 0 0 1px 1px rgba(161, 159, 159, 0.1);
 }
 
 .me-login-box h1 {

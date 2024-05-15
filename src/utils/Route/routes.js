@@ -5,7 +5,7 @@ import Index from "@/views/Index.vue";
 
 const Routes= [
     {
-        path: '',
+        path: '/',
         name:'Home',
         component: Home,
         children: [

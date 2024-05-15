@@ -21,11 +21,8 @@
       </el-form>
 
       <div class="me-login-design">
-        <p>Designed by
-          <strong>
-            <router-link to="/" class="me-login-design-color">ForFun</router-link>
-          </strong>
-        </p>
+        <p>Have an account? <router-link to="/login" class="me-login-design-color">Login</router-link></p>
+        <p>Or Back to <router-link to="/" class="me-login-design-color">Index</router-link></p>
       </div>
 
     </div>
@@ -37,7 +34,7 @@ import {register} from '@/api/login'
 import {ref,reactive} from "vue";
 import {ElMessage} from 'element-plus'
 import { useRouter } from 'vue-router'
-
+const router=useRouter()
 const userFormRef = ref(null)
 const userForm= reactive({
   username: '',
@@ -79,23 +76,23 @@ const submitForm=async (formName)=> {
             const res=response.data
             console.log(res)
             if (res.code===0){
-
               ElMessage({
                 message: '注册成功',
                 type: 'success'
               })
-              const router=useRouter()
               router.push('/login')
             }else {
               ElMessage({
-                message: res.message,
+                message: res.data,
                 type: 'error'
               })
             }
           })
-      console.log('ok')
     } else {
-      console.log('error')
+      ElMessage({
+        message: '请检查输入',
+        type: 'error'
+      })
     }
   })
 }

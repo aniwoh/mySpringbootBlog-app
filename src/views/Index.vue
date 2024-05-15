@@ -1,60 +1,103 @@
 <template>
-  <div id="index">
-    <el-container>
-      <el-main>
-        <div id="post-list"></div>
-      </el-main>
-    </el-container>
-
-  </div>
+  <el-main>
+    <div id="post-list">
+      <a v-for="article in article_list" class="post-card">
+        <div class="post-card-img" :id="'post-card-img-'+article.id"></div>
+        <div class="post-card-text">
+          <h2>{{ article.title }}</h2>
+          <p>
+            <span style="float: left;">{{ article.author }} {{ article.createDate }}</span>
+            <span style="float: right;">
+              <span v-for="tag in article.tagNames" class="tag">#{{ tag }}</span>
+              <i class="fa-solid fa-heart"></i> {{ article.thumbsUpCounts }}
+              <i class="fa-solid fa-eye"></i> {{ article.viewCounts }}
+              <i class="fa-solid fa-comment"></i> {{ article.commentCounts }}
+            </span>
+          </p>
+        </div>
+      </a>
+    </div>
+  </el-main>
 </template>
-<script>
-import service from "@/utils/request/index.js";
-let article_list = []
-service.get(`/article/list`)
+<script setup>
+import {getAllArticle} from "@/api/article.js";
+import {onMounted,ref} from "vue";
+import axios from "axios";
+const prop = defineProps(['message'])
+console.log(prop.message)
+let article_list = ref([])
+onMounted(()=>
+getAllArticle()
     .then(response => {
-      console.log(response)
-      article_list = response;
-      reloadArticleCard()
-    })
-    .catch(error => {
-      console.log(error);
-    });
-function reloadArticleCard(){
-  console.log(article_list)
-  const mainContainer =document.getElementById("post-list")
-  function createArticleCard(article) {
-    const card = document.createElement("a");
-    card.className = "post-card";
-    card.href = "/post?id=" + article.id
-    const imgDiv = document.createElement("div");
-    imgDiv.className = "post-card-img";
-    imgDiv.id = "post-" + article.id;
-    // 设置图片样式或内容，根据需要自行添
-    const textDiv = document.createElement("div");
-    textDiv.className = "post-card-text";
-    let addHtml= "<h2>" + article.title + "</h2><p>" +
-        "<span style='float: left;'>" + article.author + " " + article.created_at + "</span>" +
-        "<span style='float: right;'>"
-    if (article.tags__name!= null){
-      article.tags__name.forEach(function(tag) {
-        addHtml += "<span class='tag'>#" + tag + "</span>";
+      let data = response.data.data;
+      data.forEach((item) => {
+        item.createDate = new Date(item.createDate).toLocaleDateString();
+        if (item.tagNames) {
+          item.tagNames = item.tagNames.split(',');
+        }
       });
-    }
-    addHtml+= "<i class='fa-solid fa-heart'></i> " + "       "+article.thumbs_up+"       " +
-        "<i class='fa-solid fa-eye'></i> " + "       "+article.view_count+"       " +
-        "<i class='fa-solid fa-comment'></i> " + "       "+article.comment_count+"       "+"</span></p>";
-    textDiv.innerHTML=addHtml;
-    card.appendChild(imgDiv);
-    card.appendChild(textDiv)
-    return card;
-  }
-  article_list.forEach(article => {
-    const articleCard = createArticleCard(article);
-    mainContainer.appendChild(articleCard);
-  });
-}
+      article_list.value = data;
+    })
+    .then(()=>{
+      article_list.value.forEach((article) =>{
+        axios.get('https://t.mwm.moe/pc',{responseType: 'blob'})
+            .then(response => {
+              let reader = new FileReader();
+              reader.readAsDataURL(response.data);
+              reader.onload = function () {
+                document.querySelector('#post-card-img-'+article.id).style.backgroundImage = `url(${reader.result})`;
+              }
+            })
+        })
+      })
+    .catch(error => {
+          console.log(error);
+        })
+);
+
 </script>
 
 <style>
+.el-main {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+#post-list {
+  width: 70%;
+  left: 20%;
+  display: flex;
+  margin-left: 15%;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.post-card{
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 350px;
+  padding: 20px;
+  text-decoration: none;
+}
+
+.post-card-img {
+  border-radius: 10px;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/default.png');
+  background-size: cover;
+}
+
+.post-card-text {
+  position: relative;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  color: #fff;
+  background: rgba(0,0,0,.2);
+}
 </style>
