@@ -1,14 +1,14 @@
 <template>
   <el-main>
     <div id="post-list">
-      <a v-for="article in article_list" class="post-card">
+      <a v-for="article in prop.article_list.value" class="post-card">
         <div class="post-card-img" :id="'post-card-img-'+article.id"></div>
         <div class="post-card-text">
           <h2>{{ article.title }}</h2>
           <p>
             <span style="float: left;">{{ article.author }} {{ article.createDate }}</span>
             <span style="float: right;">
-              <span v-for="tag in article.tagNames" class="tag">#{{ tag }}</span>
+              <span v-for="tag in article.tagNames" class="tag">  #{{ tag }}</span>
               <i class="fa-solid fa-heart"></i> {{ article.thumbsUpCounts }}
               <i class="fa-solid fa-eye"></i> {{ article.viewCounts }}
               <i class="fa-solid fa-comment"></i> {{ article.commentCounts }}
@@ -21,11 +21,9 @@
 </template>
 <script setup>
 import {getAllArticle} from "@/api/article.js";
-import {onMounted,ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import axios from "axios";
-const prop = defineProps(['message'])
-console.log(prop.message)
-let article_list = ref([])
+const prop=defineProps(['article_list','article_list_all'])
 onMounted(()=>
 getAllArticle()
     .then(response => {
@@ -36,25 +34,29 @@ getAllArticle()
           item.tagNames = item.tagNames.split(',');
         }
       });
-      article_list.value = data;
+      prop.article_list_all.value = data;
+      prop.article_list.value = data;
     })
-    .then(()=>{
-      article_list.value.forEach((article) =>{
-        axios.get('https://t.mwm.moe/pc',{responseType: 'blob'})
-            .then(response => {
-              let reader = new FileReader();
-              reader.readAsDataURL(response.data);
-              reader.onload = function () {
-                document.querySelector('#post-card-img-'+article.id).style.backgroundImage = `url(${reader.result})`;
-              }
-            })
-        })
-      })
     .catch(error => {
           console.log(error);
-        })
+    })
 );
+const refresh_photo=()=>{
+  prop.article_list.value.forEach((article) =>{
+    axios.get('https://t.mwm.moe/pc',{responseType: 'blob'})
+        .then(response => {
+          let reader = new FileReader();
+          reader.readAsDataURL(response.data);
+          reader.onload = function () {
+            document.querySelector('#post-card-img-'+article.id).style.backgroundImage = `url(${reader.result})`;
+          }
+        })
+  })
+}
 
+watch(()=>prop.article_list.value,(newValue,oldValue)=>{
+  refresh_photo()
+})
 </script>
 
 <style>

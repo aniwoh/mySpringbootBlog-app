@@ -4,13 +4,14 @@ import BaseHeader from "@/views/BaseHeader.vue";
 import {ref} from "vue";
 const baseFooter = ref(BaseFooter);
 const baseHeader = ref(BaseHeader);
-const msg = ref("Hello, Vue 3.0");
+const article_list = ref([]);
+const article_list_all = ref([]);
 </script>
 <template>
   <div id="home">
     <el-container>
-      <base-header :message="msg"/>
-      <router-view :message="msg"/>
+      <base-header :article_list="article_list" :article_list_all="article_list_all"/>
+      <router-view :article_list="article_list" :article_list_all="article_list_all"/>
       <base-footer/>
     </el-container>
   </div>
