@@ -19,6 +19,11 @@ export default defineConfig({
         target:'http://localhost:8888',
         changeOrigin:true,
         rewrite: (path) => path.replace(/^\/api/, '')
+      },
+      '/randomPic':{
+        target: 'https://t.mwm.moe',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/randomPic/, '/pc')
       }
     }
   }

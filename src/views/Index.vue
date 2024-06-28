@@ -43,7 +43,7 @@ getAllArticle()
 );
 const refresh_photo=()=>{
   prop.article_list.value.forEach((article) =>{
-    axios.get('https://t.mwm.moe/pc',{responseType: 'blob'})
+    axios.get('/randomPic',{responseType: 'blob'})
         .then(response => {
           let reader = new FileReader();
           reader.readAsDataURL(response.data);
