@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <div id="post-list">
-      <a v-for="article in prop.article_list.value" class="post-card">
+      <a v-for="article in prop.article_list.value" class="post-card" :href="`/article/detail?${article.id}`">
         <div class="post-card-img" :id="'post-card-img-'+article.id"></div>
         <div class="post-card-text">
           <h2>{{ article.title }}</h2>

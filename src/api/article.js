@@ -8,3 +8,7 @@ export function getAllArticle() {
 export function getAllTags() {
     return request.get('/article/tags')
 }
+
+export function getArticleById(id) {
+    return request.get('/article/detail?id='+id)
+}

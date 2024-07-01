@@ -1,24 +1,19 @@
 <script setup>
-import { ref } from 'vue'
-import { getAllArticleService } from '@/api/article.js'
-import LoginVue from '@/views/Login.vue'
-const articleList = ref([])
-const getAllArticle=async function(){
-  let data = await  getAllArticleService();
-  articleList.value = data;
-}
-getAllArticle();
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
+import {getArticleById} from "@/api/article.js";
+
+// 获取路由
+const route = useRoute();
+const articleId = ref(route.query.id);
+const article = ref();
+
+getArticleById(articleId)
+    .then(response=>{
+      article.value=response;
+    })
+console.log(article)
 </script>
 <template>
-    <div>
-      <div class="post" v-for="(article,index) in articleList">
-          <a href="{{ article.id }}" class="post-card">
-              <div class="post-card-img" id="post-{{article.id}}"></div>
-              <div class="post-card-text">
-                  <h2>{{ article.title }}</h2>
-                  <p>{{ article.author }}     {{ article.createDate }}</p>
-              </div>
-          </a>
-      </div>
-    </div>
-  </template>
+</template>
