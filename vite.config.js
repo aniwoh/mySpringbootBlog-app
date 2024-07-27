@@ -21,9 +21,9 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       },
       '/randomPic':{
-        target: 'https://t.mwm.moe',
+        target: 'https://www.dmoe.cc/random.php?return=json',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/randomPic/, '/pc')
+        rewrite: (path) => path.replace(/^\/randomPic/, '')
       }
     }
   }

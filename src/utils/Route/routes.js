@@ -11,20 +11,19 @@ const Routes= [
         component: Home,
         children: [
             {
+                            path: '/article/:id',
+                            component: Article
+                        },
+            {
                 path:'/',
                 component: Index
-            }
+            },
         ]
     },
     {
         path: '/login',
         name: 'login',
         component: Login
-    },
-    {
-        path: '/article/:id',
-        name: 'article',
-        component: Article
     },
     {
         path: '/register',

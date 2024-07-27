@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <div id="post-list">
-      <a v-for="article in prop.article_list.value" class="post-card" :href="`/article/detail?${article.id}`">
+      <router-link :to="{path:`/article/${article.id}`,query:{id:article.id}}" v-for="article in prop.article_list.value" class="post-card">
         <div class="post-card-img" :id="'post-card-img-'+article.id"></div>
         <div class="post-card-text">
           <h2>{{ article.title }}</h2>
@@ -15,7 +15,7 @@
             </span>
           </p>
         </div>
-      </a>
+      </router-link>
     </div>
   </el-main>
 </template>
@@ -43,13 +43,10 @@ getAllArticle()
 );
 const refresh_photo=()=>{
   prop.article_list.value.forEach((article) =>{
-    axios.get('/randomPic',{responseType: 'blob'})
+    axios.get('/randomPic')
         .then(response => {
-          let reader = new FileReader();
-          reader.readAsDataURL(response.data);
-          reader.onload = function () {
-            document.querySelector('#post-card-img-'+article.id).style.backgroundImage = `url(${reader.result})`;
-          }
+          console.log(response.data.imgurl)
+          document.querySelector('#post-card-img-'+article.id).style.backgroundImage = `url(${response.data.imgurl})`;
         })
   })
 }
