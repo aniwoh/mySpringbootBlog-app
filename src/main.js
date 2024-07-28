@@ -3,9 +3,12 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import App from './App.vue'
 import router from '@/utils/Route'
+import { VueShowdown } from 'vue-showdown';
 
 
 const app =createApp(App)
+
+app.component('VueShowdown', VueShowdown);
 // v-title 全局指令, 用于设置页面标题
 app.directive('title', {
     mounted(el, binding) {

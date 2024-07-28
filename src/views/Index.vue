@@ -36,6 +36,7 @@ getAllArticle()
       });
       prop.article_list_all.value = data;
       prop.article_list.value = data;
+      document.title='aniwoh的blog'
     })
     .catch(error => {
           console.log(error);

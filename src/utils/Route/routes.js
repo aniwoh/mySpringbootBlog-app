@@ -11,9 +11,9 @@ const Routes= [
         component: Home,
         children: [
             {
-                            path: '/article/:id',
-                            component: Article
-                        },
+                path: '/article/:id',
+                component: Article
+            },
             {
                 path:'/',
                 component: Index
