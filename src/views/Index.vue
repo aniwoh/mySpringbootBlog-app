@@ -2,19 +2,23 @@
   <el-main>
     <div id="post-list">
       <router-link :to="{path:`/article/${article.id}`,query:{id:article.id}}" v-for="article in prop.article_list.value" class="post-card">
-        <div class="post-card-img" :id="'post-card-img-'+article.id"></div>
-        <div class="post-card-text">
-          <h2>{{ article.title }}</h2>
-          <p>
-            <span style="float: left;">{{ article.author }} {{ article.createDate }}</span>
-            <span style="float: right;">
-              <span v-for="tag in article.tagNames" class="tag">  #{{ tag }}</span>
-              <i class="fa-solid fa-heart"></i> {{ article.thumbsUpCounts }}
-              <i class="fa-solid fa-eye"></i> {{ article.viewCounts }}
-              <i class="fa-solid fa-comment"></i> {{ article.commentCounts }}
-            </span>
-          </p>
+        <div class="post-card-img" :id="'post-card-img-'+article.id">
+          <div class="post-card-text">
+            <div style="margin: 10px">
+              <h2>{{ article.title }}</h2>
+              <p>
+                <span style="float: left;">{{ article.author }} {{ article.createDate }}</span>
+                <span style="float: right;">
+                  <span v-for="tag in article.tagNames" class="tag">  #{{ tag }}</span>
+                  <i class="fa-solid fa-heart"></i> {{ article.thumbsUpCounts }}
+                  <i class="fa-solid fa-eye"></i> {{ article.viewCounts }}
+                  <i class="fa-solid fa-comment"></i> {{ article.commentCounts }}
+                </span>
+              </p>
+            </div>
+          </div>
         </div>
+
       </router-link>
     </div>
   </el-main>
@@ -74,7 +78,7 @@ watch(()=>prop.article_list.value,(newValue,oldValue)=>{
   display: flex;
   flex-direction: column;
   height: 350px;
-  padding: 20px;
+  margin-bottom: 20px;
   text-decoration: none;
 }
 
@@ -90,11 +94,12 @@ watch(()=>prop.article_list.value,(newValue,oldValue)=>{
 }
 
 .post-card-text {
-  position: relative;
+  border-radius: 10px;
+  position: absolute;
   right: 0;
   bottom: 0;
   left: 0;
   color: #fff;
-  background: rgba(0,0,0,.2);
+  background: rgba(0,0,0,.4);
 }
 </style>

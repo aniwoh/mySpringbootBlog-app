@@ -1,5 +1,5 @@
 <template>
-  <el-header class="me-area">
+  <el-header class="me-area" :class="{'header-hidden': isHidden}">
     <el-row class="me-header" :gutter="20">
       <el-col :span="4" class="me-header-left">
         <router-link to="/" class="me-title">
@@ -22,10 +22,10 @@
             </el-sub-menu>
           </el-sub-menu>
           <el-menu-item index="">归档</el-menu-item>
-          <el-col :span="4" style="align-content: center">
+          <el-col :span="4" style="padding: 10px">
             <el-input  size="large" placeholder="搜索文章" v-model="keywords"></el-input>
           </el-col>
-          <el-col :span="4" style="align-content: center">
+          <el-col :span="4" style="padding: 10px">
             <el-button type="primary" round @click="search"><i class="fa-solid fa-magnifying-glass"></i>搜索</el-button>
           </el-col>
         </el-menu>
@@ -46,7 +46,7 @@ import {getAllTags} from "@/api/article.js";
 const activeIndex = ref('/')
 const keywords = ref('')
 const tags = ref([])
-const prop = defineProps(['article_list','article_list_all'])
+const prop = defineProps(['article_list','article_list_all','isHidden'])
 getAllTags().then(res => {
   tags.value= res.data.data;
   console.log(tags.value)
@@ -107,5 +107,12 @@ const search = ()=>{
   border-radius: 50%;
   vertical-align: middle;
   background-color: #5fb878;
+}
+
+.el-header {
+  transition: transform 0.3s ease-in-out;
+}
+.header-hidden {
+  transform: translateY(-100%);
 }
 </style>

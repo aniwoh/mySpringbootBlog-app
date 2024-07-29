@@ -113,6 +113,7 @@ watch(()=>article.value,(newValue,oldValue)=>{
   border-radius: 10px;
   padding: 10px;
   background-color: rgba(230, 235, 240, 0.7);
+  margin-bottom: 20px;
 }
 
 .markdown-content {
