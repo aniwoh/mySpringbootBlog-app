@@ -30,9 +30,6 @@ getAllArticle()
       let data = response.data.data;
       data.forEach((item) => {
         item.createDate = new Date(item.createDate).toLocaleDateString();
-        if (item.tagNames) {
-          item.tagNames = item.tagNames.split(',');
-        }
       });
       prop.article_list_all.value = data;
       prop.article_list.value = data;
