@@ -23,6 +23,7 @@
     "vue-markdown": "^2.2.4",
     "vue-router": "^4.3.2",
     "vue-showdown": "^4.2.0",
+    "vue3-seamless-scroll": "^2.0.1",
     "vuex": "^4.1.0"
   },
   "devDependencies": {

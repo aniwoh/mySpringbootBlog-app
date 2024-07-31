@@ -22,7 +22,6 @@ const handleScroll=()=>{
   } else {
     isHeaderHidden.value = false;
   }
-  console.log(isHeaderHidden)
   lastScrollY = currentScrollY;
 }
 </script>

@@ -5,6 +5,8 @@ import App from './App.vue'
 import router from '@/utils/Route'
 import { VueShowdown } from 'vue-showdown';
 import { Buffer } from 'buffer';
+
+
 window.Buffer = Buffer;
 const app =createApp(App)
 
