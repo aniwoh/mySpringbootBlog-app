@@ -49,7 +49,6 @@ const tags = ref([])
 const prop = defineProps(['article_list','article_list_all','isHidden'])
 getAllTags().then(res => {
   tags.value= res.data.data;
-  console.log(tags.value)
 })
 const handleTagClick = (id)=>{
   console.log(id)
