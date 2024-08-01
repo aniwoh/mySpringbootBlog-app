@@ -22,4 +22,5 @@ app.directive('title', {
 })
 app.use(ElementPlus)
 app.use(router)
+
 app.mount('#app')

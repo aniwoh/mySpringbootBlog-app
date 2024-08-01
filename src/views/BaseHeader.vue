@@ -51,10 +51,10 @@ getAllTags().then(res => {
   tags.value= res.data.data;
 })
 const handleTagClick = (id)=>{
-  console.log(id)
+  console.log(prop.article_list_all.value)
     if (id===-1){
       prop.article_list.value = prop.article_list_all.value
-      prop.article_list.value.sort((a,b)=> a.id - b.id)
+      prop.article_list.value.sort((a,b)=> b.createDate - a.createDate)
     } else if(id === -2){
       prop.article_list.value.sort((a,b)=> b.thumbsUpCounts - a.thumbsUpCounts)
     } else if(id===-3){

@@ -2,12 +2,12 @@
   <el-main>
     <div id="post-list">
       <router-link :to="{path:`/article/${article.id}`}" v-for="article in prop.article_list.value" class="post-card">
-        <div class="post-card-img" :id="'post-card-img-'+article.id">
+        <div class="post-card-img" :id="'post-card-img-'+article.id" :style="{ backgroundImage: `url(${prop.picMap[article.id] || '/default.png'})` }">
           <div class="post-card-text">
             <div style="margin: 10px">
               <h2>{{ article.title }}</h2>
               <p>
-                <span style="float: left;">{{ article.author }} {{ article.createDate }}</span>
+                <span style="float: left;">{{ article.author }} {{ formatDate(article.createDate) }}</span>
                 <span style="float: right;">
                   <span v-for="tag in article.tagNames" class="tag">  #{{ tag }}</span>
                   <i class="fa-solid fa-heart"></i> {{ article.thumbsUpCounts }}
@@ -25,30 +25,36 @@
 </template>
 <script setup>
 import {getAllArticle} from "@/api/article.js";
-import {onMounted, ref, watch} from "vue";
+import {onMounted, computed, ref, watch} from "vue";
 import axios from "axios";
-const prop=defineProps(['article_list','article_list_all'])
-onMounted(()=>
-getAllArticle()
-    .then(response => {
-      let data = response.data.data;
-      data.forEach((item) => {
-        item.createDate = new Date(item.createDate).toLocaleDateString();
-      });
-      prop.article_list_all.value = data;
-      prop.article_list.value = data;
-      document.title='aniwoh的blog'
-    })
-    .catch(error => {
+import {formatDate} from "@/utils/dateFilter.js";
+
+const prop=defineProps(['article_list','article_list_all','picMap'])
+
+onMounted(()=>{
+  if(prop.article_list.value===null || prop.article_list.value===undefined){
+    getAllArticle()
+        .then(response => {
+            let data = response.data.data;
+            data.forEach((item) => {
+              item.createDate = new Date(item.createDate);
+            });
+            prop.article_list_all.value = data;
+            prop.article_list.value = data;
+            prop.article_list.value.sort((a,b)=> b.createDate - a.createDate)
+            document.title='aniwoh的blog'
+          })
+        .catch(error => {
           console.log(error);
-    })
+          })
+    }
+}
 );
 const refresh_photo=()=>{
   prop.article_list.value.forEach((article) =>{
     axios.get('/randomPic')
         .then(response => {
-          console.log(response.data.imgurl)
-          document.querySelector('#post-card-img-'+article.id).style.backgroundImage = `url(${response.data.imgurl})`;
+          prop.picMap[article.id] = response.data.imgurl;
         })
   })
 }

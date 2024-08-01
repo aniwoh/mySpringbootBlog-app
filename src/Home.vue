@@ -6,6 +6,7 @@ const baseFooter = ref(BaseFooter);
 const baseHeader = ref(BaseHeader);
 const article_list = ref([]);
 const article_list_all = ref([]);
+const picMap = ref({});
 const isHeaderHidden = ref(false);
 let lastScrollY = 0;
 onMounted(()=>
@@ -29,7 +30,7 @@ const handleScroll=()=>{
   <div id="home">
     <el-container>
       <base-header :article_list="article_list" :article_list_all="article_list_all" :isHidden="isHeaderHidden"/>
-      <router-view :article_list="article_list" :article_list_all="article_list_all"/>
+      <router-view :article_list="article_list" :article_list_all="article_list_all" :picMap="picMap"/>
       <base-footer/>
     </el-container>
   </div>

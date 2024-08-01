@@ -1,12 +1,12 @@
 <script setup>
-import {ref, onMounted, defineComponent, computed, watch} from 'vue';
+import {ref, onMounted, computed, watch} from 'vue';
 import { useRoute } from 'vue-router';
-import axios from 'axios';
 import {getArticleById} from "@/api/article.js";
 import hljs from 'highlight.js';
 import MarkdownIt from 'markdown-it'
 import 'highlight.js/scss/default.scss'
 import 'highlight.js/scss/atom-one-dark.scss'
+import {formatDate} from "@/utils/dateFilter.js";
 
 // 获取路由
 const route = useRoute();
@@ -21,7 +21,7 @@ const md = new MarkdownIt({
     // 此处判断是否有添加代码语言
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return hljs.highlight(lang,str).value
+        return hljs.highlight(str,{language:lang}).value
       } catch (__) {}
     }
     // 未添加代码语言，此处与上面同理
@@ -34,7 +34,7 @@ const fetchMarkdown = async () => {
   try {
     getArticleById(articleId.value)
         .then(response=>{
-          let date = new Date(response.data.data.createDate).toISOString().split('T')[0]
+          let date = formatDate(new Date(response.data.data.createDate))
           response.data.data.createDate = date
           article.value=response.data.data;
           document.title=response.data.data.title;
