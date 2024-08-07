@@ -1,4 +1,5 @@
-import request from "@/utils/request/index";
+import request from "@/utils/request";
+import axios from "axios";
 
 export function login(username, password) {
     const formData = new FormData();

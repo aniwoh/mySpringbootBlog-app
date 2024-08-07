@@ -33,7 +33,7 @@ const Routes= [
     },
     {
         path: '/upload',
-        name: 'register',
+        name: 'upload',
         component: Upload
     }
 ]

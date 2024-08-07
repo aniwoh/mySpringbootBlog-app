@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <div id="post-list">
-      <router-link :to="{path:`/article/${article.id}`}" v-for="article in prop.article_list.value" class="post-card">
+      <router-link :to="{path:`/article/${article.id}`}" v-for="article in prop.article_list.value" class="post-card" :key="article.id">
         <div class="post-card-img" :id="'post-card-img-'+article.id" :style="{ backgroundImage: `url(${prop.picMap[article.id] || '/default.png'})` }">
           <div class="post-card-text">
             <div style="margin: 10px">
