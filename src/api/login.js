@@ -2,16 +2,11 @@ import request from "@/utils/request";
 import axios from "axios";
 
 export function login(username, password) {
-    const formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
+    const data={'username':username,'password':password}
     return request({
       url: "/user/login",
       method: "post",
-      data: formData,
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
+      data: data,
     });
 }
 
