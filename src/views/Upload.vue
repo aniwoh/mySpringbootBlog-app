@@ -5,6 +5,7 @@ import {ref} from 'vue';
 import { UploadFilled } from '@element-plus/icons-vue'
 import {ElMessage} from "element-plus";
 
+import {uploadArticle} from "@/api/uploadArticle.js";
 let articleDataMap = new Map();
 const fileList = ref([]);
 // 处理文件选择变化
@@ -43,8 +44,15 @@ const submitUpload = () => {
     }
   console.log(articleDataMap)
   articleDataMap.forEach(function(value,key){
-    const response = axios.put('/api/article/upload',value);
-    console.log(response)
+    uploadArticle(value)
+        .then(response=>{
+          if (response.data.code===0){
+            console.log(key+"上传完成")
+          } else {
+            console.log(key+"上传失败"+response.data.data)
+          }
+
+        })
   })
 };
 </script>

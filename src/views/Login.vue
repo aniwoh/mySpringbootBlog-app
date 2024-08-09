@@ -55,7 +55,9 @@ const submitForm = async (formName) => {
           .then(response=>{
             const res=response.data
             console.log(res)
+            const token = res.data
             if (res.code===0){
+              localStorage.setItem('token', token); // 存储 token
               ElMessage({
                 message: '注册成功',
                 type: 'success'
