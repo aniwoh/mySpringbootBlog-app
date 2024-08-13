@@ -7,27 +7,22 @@ export function login(username, password) {
       url: "/user/login",
       method: "post",
       data: data,
-    });
+    },{withCredentials:true});
 }
 
 export function logout() {
     return request({
-      url: "/user/logout",
-      method: "get"
+        url: "/user/logout",
+        method: "get"
     });
 }
 
 export function register(username, password) {
+    const data={'username':username,'password':password}
 
-    const formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
     return request({
-      url: "/user/register",
-      method: "post",
-        data: formData,
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
+        url: "/user/register",
+        method: "post",
+        data: data,
     });
 }

@@ -30,6 +30,8 @@ import {ref,reactive} from "vue";
 import {login} from "@/api/login.js";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+import Cookies from 'js-cookie';
+
 const router=useRouter()
 const userFormRef = ref(null)
 const userForm= reactive({
@@ -55,11 +57,9 @@ const submitForm = async (formName) => {
           .then(response=>{
             const res=response.data
             console.log(res)
-            const token = res.data
             if (res.code===0){
-              localStorage.setItem('token', token); // 存储 token
               ElMessage({
-                message: '注册成功',
+                message: '登陆成功',
                 type: 'success'
               })
               router.push('/')
