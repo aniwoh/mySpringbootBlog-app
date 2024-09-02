@@ -31,7 +31,13 @@
         </el-menu>
       </el-col>
       <el-col :span="4">
-        <el-menu :router=true menu-trigger="click" mode="horizontal">
+        <el-menu :router=true menu-trigger="click" mode="horizontal" v-if="isLoggedIn">
+          <el-menu-item index="/">
+            <img :src="account.user_pic" class="avatar"  alt=""/>
+            <span>{{ account.username }}</span>
+          </el-menu-item>
+        </el-menu>
+        <el-menu :router=true menu-trigger="click" mode="horizontal" v-else>
           <el-menu-item index="/login">登录</el-menu-item>
           <el-menu-item index="/register">注册</el-menu-item>
         </el-menu>
@@ -41,15 +47,38 @@
 </template>
 
 <script setup>
-import { ref  } from 'vue'
+import { ref  ,onMounted} from 'vue'
 import {getAllTags} from "@/api/article.js";
+import {account_info} from "@/api/account_info.js";
 const activeIndex = ref('/')
 const keywords = ref('')
 const tags = ref([])
 const prop = defineProps(['article_list','article_list_all','isHidden'])
+const isLoggedIn = ref(false);
+const account = ref(null);
+
 getAllTags().then(res => {
   tags.value= res.data.data;
 })
+const fetchAccountInfo = async () => {
+  try {
+    account_info().then(res=> {
+      account.value=res.data.data;
+      if (account.value.user_pic == null){
+        account.value.user_pic = '/avater_128.ico'
+      }
+      isLoggedIn.value=true;
+    })
+  } catch (error) {
+    console.error('Failed to fetch account info:', error);
+    isLoggedIn.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchAccountInfo();
+});
+
 const handleTagClick = (id)=>{
   console.log(prop.article_list_all.value)
     if (id===-1){
@@ -116,5 +145,11 @@ const handleSelect = (key, keyPath) => {
 }
 .header-hidden {
   transform: translateY(-100%);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 </style>

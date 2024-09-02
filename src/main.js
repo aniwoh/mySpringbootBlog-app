@@ -5,11 +5,12 @@ import App from './App.vue'
 import router from '@/utils/Route'
 import { VueShowdown } from 'vue-showdown';
 import { Buffer } from 'buffer';
+import axios  from "axios";
 
 
 window.Buffer = Buffer;
 const app =createApp(App)
-
+axios.defaults.withCredentials = true;
 app.component('VueShowdown', VueShowdown);
 // v-title 全局指令, 用于设置页面标题
 app.directive('title', {
