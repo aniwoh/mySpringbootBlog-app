@@ -56,27 +56,24 @@ const tags = ref([])
 const prop = defineProps(['article_list','article_list_all','isHidden'])
 const isLoggedIn = ref(false);
 const account = ref(null);
+import request from "@/utils/request";
 
 getAllTags().then(res => {
   tags.value= res.data.data;
 })
-const fetchAccountInfo = async () => {
-  try {
-    account_info().then(res=> {
-      account.value=res.data.data;
-      if (account.value.user_pic == null){
-        account.value.user_pic = '/avater_128.ico'
-      }
-      isLoggedIn.value=true;
-    })
-  } catch (error) {
-    console.error('Failed to fetch account info:', error);
-    isLoggedIn.value = false;
-  }
+const fetchAccountInfo = () => {
+  request.get('/user/accountInfo').then(res=> {
+    account.value=res.data.data;
+    if (account.value.user_pic == null){
+      account.value.user_pic = '/avater_128.ico'
+    }
+    isLoggedIn.value=true;
+  })
+      .catch(error => {})
 };
 
 onMounted(() => {
-  fetchAccountInfo();
+    fetchAccountInfo();
 });
 
 const handleTagClick = (id)=>{

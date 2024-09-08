@@ -1,8 +1,6 @@
 import axios  from "axios";
 import {BASE_API} from '/config/dev.env.js'
 
-let isAlertShown = false;
-
 const service = axios.create({
     baseURL: BASE_API,
     timeout: 10000
