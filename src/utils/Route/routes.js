@@ -4,6 +4,8 @@ import Home from "@/Home.vue";
 import Index from "@/views/Index.vue";
 import Article from "@/views/Article.vue";
 import Upload from  "@/views/Upload.vue";
+import  NewIndex from "@/views/NewIndex.vue"
+
 
 const Routes= [
     {
@@ -35,6 +37,11 @@ const Routes= [
         path: '/upload',
         name: 'upload',
         component: Upload
+    },
+    {
+        path: '/newIndex',
+        name: 'newIndex',
+        component: NewIndex
     }
 ]
 export default Routes;
