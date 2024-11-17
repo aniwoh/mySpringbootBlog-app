@@ -95,7 +95,7 @@ html,body{
     width: 50%;
     height: 100%;
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
-    padding: 20px 20px 0 20px;
+    padding: 20px 0 0 20px;
     display: flex;
     flex-direction: column;
     background: #ffffff;
@@ -112,6 +112,7 @@ html,body{
       gap: 10px;
       display: flex;
       flex-direction: column;
+      padding-right: 20px;
       .article-card{
         &:hover{
           background: $hoverColor;
@@ -149,21 +150,27 @@ html,body{
     }
   }
 }
+
+@media (max-width: 768px) {
+  .article-index{
+    width: 100% !important;
+  }
+}
 // 滚动条
-::v-deep ::-webkit-scrollbar {
+:deep(::-webkit-scrollbar)  {
   background-color: transparent;
   width: 12px;
   height: 12px;
 }
 
-::v-deep ::-webkit-scrollbar-thumb {
+:deep(::-webkit-scrollbar-thumb)  {
   background-color: $scrollbarColor;
   border-radius: 8px;
   background-clip: content-box;
   border: 2px solid transparent;
 }
 
-::v-deep ::-webkit-scrollbar-corner {
+:deep(::-webkit-scrollbar-corner)  {
   background-color: unset;
 }
 </style>

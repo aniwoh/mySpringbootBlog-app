@@ -5,6 +5,7 @@ import Index from "@/views/Index.vue";
 import Article from "@/views/Article.vue";
 import Upload from  "@/views/Upload.vue";
 import  NewIndex from "@/views/NewIndex.vue"
+import BookShelf from "@/views/novel/BookShelf.vue"
 
 
 const Routes= [
@@ -42,6 +43,22 @@ const Routes= [
         path: '/newIndex',
         name: 'newIndex',
         component: NewIndex
+    },
+    {
+        path: '/novel',
+        name: 'novel',
+        children: [
+            {
+                path: '',
+                name:'novel',
+                component: BookShelf
+            },
+            {
+                path: 'bookshelf',
+                name:'bookshelf',
+                component: BookShelf
+            },
+        ]
     }
 ]
 export default Routes;
