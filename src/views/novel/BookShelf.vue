@@ -4,7 +4,7 @@
             <span>阅读</span>
         </div>
         <div class="me-bookshelf-main">
-            <div class="me-bookshelf-bookCard" v-for="item in novelList" :key="item.id">
+            <div class="me-bookshelf-bookCard" v-for="item in novelList" :key="item.id" @click="onNovelClick(item.id)">
                 <div class="bookCard-img">
                     <img src="@/assets/defaultCover.png" alt class="cover">
                 </div>
@@ -13,14 +13,14 @@
                         {{ item.title }}
                     </div>
                     <div class="info">
-                        {{ item.author? item.author:"---" }} | 共2585章 | {{item.updateDate}}
+                        {{ item.author? item.author:"---" }} | 共{{item.chapterCount}}章 | {{item.updateDate}}
 
                     </div>
                     <div class="chapter-info">
-                        已读：第二百四十八章 测试测试测试测试测试测试测试测试测试测试测试测试测试
+                        已读：{{item.processChapter? item.processChapter.title:"未开始"}}
                     </div>
                     <div class="chapter-info">
-                        最新：第二百四十八章 测试
+                        最新：{{item.lastChapter.title}}
                     </div>
                 </div>
 
@@ -113,6 +113,9 @@ export default {
             )
 
         },
+      onNovelClick(id){
+            this.$router.push({name:'chapter', params:{id}})
+      }
     }
 }
 </script>

@@ -6,6 +6,7 @@ import Article from "@/views/Article.vue";
 import Upload from  "@/views/Upload.vue";
 import  NewIndex from "@/views/NewIndex.vue"
 import BookShelf from "@/views/novel/BookShelf.vue"
+import Chapter from "@/views/novel/Chapter.vue";
 
 
 const Routes= [
@@ -58,6 +59,12 @@ const Routes= [
                 name:'bookshelf',
                 component: BookShelf
             },
+            {
+                path: 'chapter/:id',
+                name:'chapter',
+                component: Chapter,
+                props: true
+            }
         ]
     }
 ]
