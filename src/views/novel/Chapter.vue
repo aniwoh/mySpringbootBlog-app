@@ -169,7 +169,7 @@ export default {
         },
         // 初始化 WebSocket
         initWebSocket() {
-            this.socket = new WebSocket("ws://localhost:8888/websocket");
+            this.socket = new WebSocket("ws://127.0.0.1:8888/websocket");
 
             this.socket.onopen = () => {
                 console.log("WebSocket connected");
