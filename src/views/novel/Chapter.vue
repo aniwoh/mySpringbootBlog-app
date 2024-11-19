@@ -73,6 +73,7 @@ export default {
             socket: null, // WebSocket 实例
             debounceTimer: null, // 防抖计时器
             options:[],
+            wsURL: import.meta.env.VITE_BASE_WS
         }
     },
     methods:{
@@ -169,7 +170,7 @@ export default {
         },
         // 初始化 WebSocket
         initWebSocket() {
-            this.socket = new WebSocket("ws://127.0.0.1:8888/websocket");
+            this.socket = new WebSocket(this.wsURL);
 
             this.socket.onopen = () => {
                 console.log("WebSocket connected");

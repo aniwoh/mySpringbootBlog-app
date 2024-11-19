@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/blog/', // 设置基础路径
+  base: '/', // 设置基础路径
   plugins: [
     vue(),
   ],
@@ -16,7 +16,7 @@ export default defineConfig({
   },
   server: {
     port: '5173',
-    host: '0.0.0.0', // 允许外部访问
+    host: '::', // 允许外部访问
     proxy:{
       '/api':{
         target:'http://localhost:8888/',
