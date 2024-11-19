@@ -33,7 +33,7 @@
         <el-dialog v-model="dialogVisible" title="添加书籍" @close="handleDialogClose">
             <el-upload
                 drag
-                action="/api/novel/upload"
+                :action="uploadUrl"
                 :auto-upload="false"
                 :limit="1"
                 :on-change="handleChange"
@@ -77,6 +77,7 @@ export default {
             dialogVisible:false,
             fileList: [], // 存储当前上传的文件
             novelList:[],
+            uploadUrl: import.meta.env.VITE_BASE_Url+'/novel/upload',
         }
     },
     mounted() {
