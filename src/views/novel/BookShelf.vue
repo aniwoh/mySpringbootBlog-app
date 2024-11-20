@@ -47,7 +47,7 @@
                 </div>
                 <template #tip>
                     <div class="el-upload__tip">
-                        jpg/png files with a size less than 500kb
+                        txt file with a size less than 50MB
                     </div>
                 </template>
             </el-upload>
@@ -64,7 +64,6 @@
 </template>
 <script>
 import {CirclePlus, Plus, UploadFilled} from "@element-plus/icons-vue";
-import {ref} from "vue";
 import {getAllNovel} from "@/api/novel.js";
 
 export default {

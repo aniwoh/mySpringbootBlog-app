@@ -1,16 +1,15 @@
 <template>
     <div class="container">
-        <div class="main-content" ref="contentContainer" >
+        <div class="main-content" ref="contentContainer">
             <div class="chapter-title" v-if="currentChapter">
                 {{ currentChapter.title}}
             </div>
-            <div class="chapter-content">
+            <div class="chapter-content" ref="paragraphContainer">
                 <div v-if="currentChapterContent">
                     <p
                         v-for="(paragraph, index) in currentChapterContent.split('\n')"
                         :key="index"
                         :ref="'paragraph-' + index"
-                        :class="{ active: index === currentProgress.paragraphIndex }"
                     >
                         {{ paragraph }}
                     </p>
@@ -52,10 +51,15 @@ export default {
         // 监听滚动事件
         this.$refs.contentContainer.addEventListener("scroll", this.handleScroll);
     },
+    beforeRouteLeave(to, from, next) {
+        this.closeWebSocket();
+        next();
+    },
     beforeDestroy() {
-        if (this.socket) {
-            this.socket.close();
-        }
+        // if (this.socket && this.socket.readyState !== WebSocket.CLOSED) {
+        //     this.socket.close();
+        //     console.log("WebSocket closed on destroy");
+        // }
         this.$refs.contentContainer.removeEventListener("scroll", this.handleScroll);
     },
     data(){
@@ -73,7 +77,7 @@ export default {
             socket: null, // WebSocket 实例
             debounceTimer: null, // 防抖计时器
             options:[],
-            wsURL: import.meta.env.VITE_BASE_WS
+            wsURL: import.meta.env.VITE_BASE_WS,
         }
     },
     methods:{
@@ -96,9 +100,9 @@ export default {
                     this.currentProgress.id = progress.id
                     this.currentProgress.chapterId = progress.chapterId
                     this.currentProgress.paragraphIndex = progress.paragraphIndex
-                    this.loadChapter(progress.chapterId, progress.paragraphIndex);
+                    await this.loadChapter(progress.chapterId, progress.paragraphIndex);
                 }else {
-                    this.loadChapter(this.chapters[0].id, 0); // 默认跳转到第一章
+                    await this.loadChapter(this.chapters[0].id, 0); // 默认跳转到第一章
                 }
             } catch (error) {
                 console.error("Error loading chapters or progress:", error);
@@ -147,29 +151,36 @@ export default {
         },
         // 更新阅读进度
         updateProgress() {
-            const paragraphs = this.$refs.contentContainer.querySelectorAll("p");
-            const containerTop = this.$refs.contentContainer.getBoundingClientRect().top; // 容器相对视口的顶部位置
-
-// 找到第一个完全可见的段落
-            let visibleParagraphIndex = 0;
-            paragraphs.forEach((paragraph, index) => {
+            const paragraphs = this.$refs.paragraphContainer.querySelectorAll("p");
+            // 找到第一个完全可见的段落
+            let visibleParagraphIndex = 0
+            for (const [index, paragraph] of paragraphs.entries()) {
                 const rect = paragraph.getBoundingClientRect(); // 段落相对视口的位置
-                if (rect.top >= containerTop && rect.top <= containerTop + this.$refs.contentContainer.offsetHeight) {
+                if (rect.top>0){
                     visibleParagraphIndex = index;
+                    break
                 }
-            });
-
+            }
 
             this.currentProgress.paragraphIndex = visibleParagraphIndex;
             localStorage.setItem("currentProgress", JSON.stringify(this.currentProgress));
 
             // 同步到服务器
+            if (!this.socket || this.socket.readyState !== WebSocket.OPEN){
+                this.initWebSocket();
+                return
+            }
             if (this.socket && this.socket.readyState === WebSocket.OPEN) {
                 this.socket.send(JSON.stringify(this.currentProgress));
             }
         },
         // 初始化 WebSocket
         initWebSocket() {
+            if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+                console.log("WebSocket connection already exists");
+                return;
+            }
+
             this.socket = new WebSocket(this.wsURL);
 
             this.socket.onopen = () => {
@@ -193,6 +204,14 @@ export default {
                 console.error("WebSocket error:", error);
             };
         },
+        closeWebSocket() {
+            if (this.socket) {
+                this.socket.close();
+                this.socket = null;
+                console.log("WebSocket manually closed");
+            }
+        },
+
         preChapter(){
             const index = this.chapters.find(item=>item.id===this.currentChapter.id).index
             if (index===0){
@@ -208,7 +227,7 @@ export default {
         },
         onSelectChange(value){
             this.loadChapter(value,0)
-        }
+        },
 
     }
 }
