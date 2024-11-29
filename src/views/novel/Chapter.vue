@@ -1,11 +1,18 @@
 <template>
     <div class="container">
         <div class="main-content" ref="contentContainer">
-            <div class="chapter-title" v-if="currentChapter">
+            <div class="chapter-title" v-if="currentChapter" ref="paragraph--1">
                 {{ currentChapter.title}}
             </div>
+            <div class="chapter-tool" :style="{fontSize:`${sizeFont}px`}">
+                <span>字号：</span>
+                <el-icon @click="sizeFont--" class="font-resize"><RemoveFilled /></el-icon>
+                <span>{{ sizeFont }}</span>
+                <el-icon @click="sizeFont++" class="font-resize"><CirclePlusFilled /></el-icon>
+
+            </div>
             <div class="chapter-content" ref="paragraphContainer">
-                <div v-if="currentChapterContent">
+                <div v-if="currentChapterContent" :style="{fontSize:`${sizeFont}px`}">
                     <p
                         v-for="(paragraph, index) in currentChapterContent.split('\n')"
                         :key="index"
@@ -36,9 +43,9 @@
 </template>
 <script>
 import {getChapter, getChapterList, getChapterProcessing} from "@/api/novel.js";
-import {ArrowLeft, ArrowRight, List} from "@element-plus/icons-vue";
+import {ArrowLeft, ArrowRight, CirclePlusFilled, List, RemoveFilled} from "@element-plus/icons-vue";
 export default {
-    components: {List, ArrowLeft, ArrowRight},
+    components: {RemoveFilled, CirclePlusFilled, List, ArrowLeft, ArrowRight},
     props: {
         id: String
     },
@@ -50,6 +57,7 @@ export default {
     mounted() {
         // 监听滚动事件
         this.$refs.contentContainer.addEventListener("scroll", this.handleScroll);
+        this.sizeFont = localStorage.getItem("sizeFont") || 18;
     },
     beforeRouteLeave(to, from, next) {
         this.closeWebSocket();
@@ -61,6 +69,14 @@ export default {
         //     console.log("WebSocket closed on destroy");
         // }
         this.$refs.contentContainer.removeEventListener("scroll", this.handleScroll);
+    },
+    watch:{
+        sizeFont(newVal,oldVal){
+            localStorage.setItem("sizeFont", newVal);
+        },
+        'currentChapter.title'(newVal,oldVal){
+            document.title = newVal;
+        }
     },
     data(){
         return{
@@ -78,6 +94,7 @@ export default {
             debounceTimer: null, // 防抖计时器
             options:[],
             wsURL: import.meta.env.VITE_BASE_WS+'/readingProgress',
+            sizeFont: 18
         }
     },
     methods:{
@@ -102,7 +119,7 @@ export default {
                     this.currentProgress.paragraphIndex = progress.paragraphIndex
                     await this.loadChapter(progress.chapterId, progress.paragraphIndex);
                 }else {
-                    await this.loadChapter(this.chapters[0].id, 0); // 默认跳转到第一章
+                    await this.loadChapter(this.chapters[0].id, -1); // 默认跳转到第一章
                 }
             } catch (error) {
                 console.error("Error loading chapters or progress:", error);
@@ -218,15 +235,15 @@ export default {
                 return
             }
             const chapter = this.chapters.find(item=>item.index===index-1)
-            this.loadChapter(chapter.id,0)
+            this.loadChapter(chapter.id,-1)
         },
         nextChapter(){
             const index = this.chapters.find(item=>item.id===this.currentChapter.id).index
             const chapter = this.chapters.find(item=>item.index===index+1)
-            this.loadChapter(chapter.id,0)
+            this.loadChapter(chapter.id,-1)
         },
         onSelectChange(value){
-            this.loadChapter(value,0)
+            this.loadChapter(value,-1)
         },
 
     }
@@ -253,8 +270,19 @@ export default {
         overflow-y: auto;
         .chapter-title{
             font-size: 24px;
-            margin-bottom: 57px;
+            //margin-bottom: 57px;
             font-family: PingFangSC-Regular,HelveticaNeue-Light,Helvetica Neue Light,Microsoft YaHei,sans-serif;
+        }
+        .chapter-tool{
+            margin: 5px;
+            height: 30px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            .font-resize{
+                cursor: pointer;
+            }
         }
         .chapter-content{
             font-size: 18px;
