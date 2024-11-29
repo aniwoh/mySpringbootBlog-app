@@ -54,15 +54,15 @@ const reValidatePass = (rule, value, callback) => {
 const rules = reactive({
   username: [
     {required: true, message: 'Please input the username', trigger: 'blur'},
-    {max: 10, message: 'The length cannot exceed 10 characters', trigger: 'blur'}
+    {max: 18, message: 'The length cannot exceed 10 characters', trigger: 'blur'}
   ],
   password: [
     {required: true, message: 'Please input the password', trigger: 'blur'},
-    {max: 10, message: 'The length cannot exceed 10 characters', trigger: 'blur'}
+    {max: 18, message: 'The length cannot exceed 10 characters', trigger: 'blur'}
   ],
   repassword: [
     {required: true, message: 'Please input the password again', trigger: 'blur'},
-    {max: 10, message: 'The length cannot exceed 10 characters', trigger: 'blur'},
+    {max: 18, message: 'The length cannot exceed 10 characters', trigger: 'blur'},
     {validator: reValidatePass, trigger: 'blur'}
   ]
 })

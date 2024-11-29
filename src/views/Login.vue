@@ -17,7 +17,7 @@
       </el-form>
 
       <div class="me-login-design">
-        <p>Don't have an account? Register</p>
+<!--        <p>Don't have an account? Register</p>-->
 <!--        <p>Don't have an account? <router-link to="/register" class="me-login-design-color">Register</router-link></p>-->
         <p>Or Back to <router-link to="/" class="me-login-design-color">Index</router-link></p>
       </div>
@@ -42,11 +42,11 @@ const userForm= reactive({
 const rules= ref({
   username: [
       {required: true, message: '请输入用户名', trigger: 'blur'},
-      {max: 10, message: '不能大于10个字符', trigger: 'blur'}
+      {max: 18, message: '不能大于10个字符', trigger: 'blur'}
   ],
   password: [
       {required: true, message: '请输入密码', trigger: 'blur'},
-      {max: 10, message: '不能大于10个字符', trigger: 'blur'}
+      {max: 18, message: '不能大于10个字符', trigger: 'blur'}
 ]
 })
 const submitForm = async (formName) => {
