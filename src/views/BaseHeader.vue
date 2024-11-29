@@ -62,14 +62,21 @@ getAllTags().then(res => {
   tags.value= res.data.data;
 })
 const fetchAccountInfo = () => {
-  request.get('/user/accountInfo').then(res=> {
-    account.value=res.data.data;
-    if (account.value.user_pic == null){
-      account.value.user_pic = '/avater_128.ico'
+  //从cookie中读取token
+  const cookies = document.cookie.split(';');
+  cookies.forEach(cookie => {
+    const [key, value] = cookie.split('=');
+    if (key.trim() === 'satoken') {
+      request.get('/user/accountInfo').then(res=> {
+        account.value=res.data.data;
+        if (account.value.user_pic == null){
+          account.value.user_pic = '/avater_128.ico'
+        }
+        isLoggedIn.value=true;
+      })
+          .catch(error => {})
     }
-    isLoggedIn.value=true;
-  })
-      .catch(error => {})
+  });
 };
 
 onMounted(() => {

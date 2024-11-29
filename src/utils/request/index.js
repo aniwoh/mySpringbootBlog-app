@@ -1,8 +1,11 @@
 import axios  from "axios";
+import router from "@/utils/Route/index.js";
+
+let isAlertShown = false;
 
 const service = axios.create({
     baseURL: import.meta.env.VITE_BASE_Url,
-    timeout: 10000
+    timeout: 30000
   })
 
 service.interceptors.request.use(config => {
@@ -13,4 +16,20 @@ service.interceptors.request.use(config => {
     // 处理请求错误
     return Promise.reject(error);
 });
+
+service.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response && error.response.status === 401) {
+            if (!isAlertShown) {
+                isAlertShown = true;
+                alert('Token过期，请重新登录');
+                router.push('/login').then(() => {
+                    isAlertShown = false;
+                });
+            }
+        }
+        return Promise.reject(error);
+    }
+);
 export default service

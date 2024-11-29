@@ -18,6 +18,11 @@ export default defineConfig(({ mode }) => {
       port: '5173',
       host: '::', // 允许外部访问
       proxy: {
+        '/api': {
+          target: 'http://localhost:8888',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
         '/randomPic': {
           target: 'https://www.dmoe.cc/random.php?return=json',
           changeOrigin: true,

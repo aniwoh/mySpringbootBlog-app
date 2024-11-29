@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --mode dev",
+    "outDev": "vite --mode outDev",
     "build": "vite build --mode prd",
     "preview": "vite preview"
   },

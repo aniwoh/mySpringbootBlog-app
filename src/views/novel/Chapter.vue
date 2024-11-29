@@ -77,7 +77,7 @@ export default {
             socket: null, // WebSocket 实例
             debounceTimer: null, // 防抖计时器
             options:[],
-            wsURL: import.meta.env.VITE_BASE_WS,
+            wsURL: import.meta.env.VITE_BASE_WS+'/readingProgress',
         }
     },
     methods:{

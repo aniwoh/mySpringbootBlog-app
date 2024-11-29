@@ -1,11 +1,10 @@
 import axios  from "axios";
-import {BASE_API} from '/config/dev.env.js'
 import router from "@/utils/Route/index.js";
 
 let isAlertShown = false;
 
 const service = axios.create({
-    baseURL: BASE_API,
+    baseURL: import.meta.env.VITE_BASE_Url,
     timeout: 10000
 })
 

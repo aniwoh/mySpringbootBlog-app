@@ -17,7 +17,8 @@
       </el-form>
 
       <div class="me-login-design">
-        <p>Don't have an account? <router-link to="/register" class="me-login-design-color">Register</router-link></p>
+        <p>Don't have an account? Register</p>
+<!--        <p>Don't have an account? <router-link to="/register" class="me-login-design-color">Register</router-link></p>-->
         <p>Or Back to <router-link to="/" class="me-login-design-color">Index</router-link></p>
       </div>
 
