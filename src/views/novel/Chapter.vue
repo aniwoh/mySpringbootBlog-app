@@ -64,10 +64,6 @@ export default {
         next();
     },
     beforeDestroy() {
-        // if (this.socket && this.socket.readyState !== WebSocket.CLOSED) {
-        //     this.socket.close();
-        //     console.log("WebSocket closed on destroy");
-        // }
         this.$refs.contentContainer.removeEventListener("scroll", this.handleScroll);
     },
     watch:{
